@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Détails de l'événement</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f8f9fa; 
+        }
+        .event-details {
+            background: #ffffff; 
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1); 
+        }
+        .event-image {
+            max-height: 400px; 
+            object-fit: cover; 
+            border-radius: 10px; 
+            margin-bottom: 20px; 
+        }
+        .btn-back {
+            background-color: #6c757d; 
+            color: white;
+            border: none;
+            transition: 0.3s;
+        }
+        .btn-back:hover {
+            background-color: #5a6268; 
+        }
+        .event-header {
+            color: #007bff; 
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+<div class="container mt-5">
+    <div class="event-details">
+        <h1 class="event-header mb-4 text-center">Détails de l'événement</h1>
+        <div class="text-center mb-4">
+            <img th:src="@{${event.image}}" alt="Image de l'événement" class="event-image img-fluid" />
+        </div>
+        <h3 class="mb-3"><strong>Nom :</strong> <span th:text="${event.name}">Nom de l'événement</span></h3>
+        <h5><strong>Description :</strong></h5>
+        <p class="mb-4" th:text="${event.description}">Description de l'événement</p>
+        <a href="/home" class="btn btn-back btn-block">Retour à la liste</a>
+    </div>
+</div>
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

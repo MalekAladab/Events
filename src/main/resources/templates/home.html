@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Page d'accueil des événements</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            padding-top: 50px;
+        }
+        .table th, .table td {
+            text-align: center;
+            vertical-align: middle;
+        }
+        .event-image {
+            max-width: 100px;
+            max-height: 100px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <a class="navbar-brand" href="/">Événements</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item active">
+                    <a class="nav-link" href="/home">Consulter les événements</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/login">Se Connecter</a>
+                </li>
+				
+            </ul>
+        </div>
+    </nav>
+    
+    <div class="container">
+        <h1 class="text-center mb-4">Événements à venir</h1>
+
+		<form action="/home" method="get" class="mb-4">
+		    <div class="row">
+		        <div class="col-md-4">
+		            <input type="text" name="category" class="form-control" placeholder="Catégorie"
+		                   th:value="${category != null ? category : ''}">
+		        </div>
+		        <div class="col-md-4">
+		            <input type="text" name="location" class="form-control" placeholder="Lieu"
+		                   th:value="${location != null ? location : ''}">
+		        </div>
+		        <div class="col-md-4">
+		            <input type="text" name="date" class="form-control" placeholder="Date (YYYY-MM-DD)"
+		                   th:value="${date != null ? date : ''}">
+		        </div>
+		    </div>
+		    <button type="submit" class="btn btn-primary mt-3">Rechercher</button>
+		</form>
+        <table class="table table-bordered">
+            <thead class="thead-dark">
+                <tr>
+                    <th>Nom</th>
+                    <th>Date</th>
+                    <th>Lieu</th>
+                    <th>Catégorie</th>
+                    <th>Image</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="event : ${eventsPage.content}">
+                    <td>
+                        <span th:text="${event.name}" 
+                              data-toggle="tooltip" 
+                              th:attr="title=${event.description}">Nom de l'événement</span>
+                    </td>
+                    <td th:text="${event.date}">Date de l'événement</td>
+                    <td th:text="${event.location}">Lieu de l'événement</td>
+                    <td th:text="${event.category}">Catégorie de l'événement</td>
+                    <td>
+                        <img th:if="${event.image != null}" th:src="@{${event.image}}" alt="Photo de l'événement"
+                             class="img-rounded img-responsive" style="max-height: 150px; max-width: 150px;">
+                        <img th:if="${event.image == null}" th:src="@{'/uploads/default.png'}" alt="Image par défaut"
+                             class="img-rounded img-responsive" style="max-height: 150px; max-width: 150px;">
+                    </td>
+                    <td>
+                        <a th:href="@{/détails/{id}(id=${event.id})}" class="btn btn-info btn-sm">Voir Détails</a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <div th:if="${eventsPage.totalPages > 1}" class="d-flex justify-content-center mt-4">
+            <nav aria-label="Page navigation">
+                <ul class="pagination">
+                    <li class="page-item" th:classappend="${eventsPage.hasPrevious() ? '' : 'disabled'}">
+                        <a class="page-link" th:href="@{/home(page=${eventsPage.number - 1}, size=${eventsPage.size}, category=${category}, location=${location}, date=${date})}" aria-label="Précédent">
+                            <span aria-hidden="true">&laquo;</span>
+                        </a>
+                    </li>
+                   
+                    <li class="page-item active" aria-current="page">
+                        <span class="page-link" th:text="${eventsPage.number + 1}">1</span>
+                    </li>
+                    <li class="page-item" th:classappend="${eventsPage.hasNext() ? '' : 'disabled'}">
+                        <a class="page-link" th:href="@{/home(page=${eventsPage.number + 1}, size=${eventsPage.size}, category=${category}, location=${location}, date=${date})}" aria-label="Suivant">
+                            <span aria-hidden="true">&raquo;</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+        <div th:if="${eventsPage.content.size() == 0}" class="text-center mt-4">
+            <p class="text-muted">Aucun événement trouvé.</p>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.0/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+        $(function () {
+            $('[data-toggle="tooltip"]').tooltip();
+        });
+    </script>
+</body>
+</html>
